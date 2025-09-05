@@ -1,12 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 100'><rect width='160' height='100' rx='15' ry='15' fill='%23FFFFFF'/></svg>">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>White Light</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 100'><rect width='160' height='100' rx='15' ry='15' fill='%23FFFFFF'/></svg>"
+    />
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        background: white;
+        transition: background-color 0.3s;
+      }
+
+      .slider-container {
+        position: fixed;
+        bottom: 10px;
+        left: 10%;
+        width: 80%;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        height: 6px;
+      }
+    </style>
   </head>
   <body>
+    <div class="slider-container">
+      <input type="range" min="0" max="100" value="50" id="slider" />
+    </div>
+
+    <script>
+      const slider = document.getElementById("slider");
+      const body = document.body;
+
+      function updateColor(value) {
+        if (value <= 50) {
+          const ratio = value / 50;
+          const r = 255;
+          const g = Math.round(165 + 90 * ratio);
+          const b = Math.round(0 + 255 * ratio);
+          body.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+        } else {
+          const ratio = (value - 50) / 50;
+          const r = Math.round(255 - 80 * ratio);
+          const g = Math.round(255 - 30 * ratio);
+          const b = 255;
+          body.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+        }
+      }
+
+      slider.addEventListener("input", (e) => updateColor(e.target.value));
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") {
+          slider.value = Math.max(0, slider.value - 1);
+          updateColor(slider.value);
+        }
+        if (e.key === "ArrowRight") {
+          slider.value = Math.min(100, +slider.value + 1);
+          updateColor(slider.value);
+        }
+      });
+
+      updateColor(slider.value);
+    </script>
   </body>
 </html>
